@@ -6,15 +6,15 @@ const { Tag, Product, ProductTag } = require('../../models');
 router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
-  Tag.findAll({
-    include: [
-      { 
+  Tag.findAll(
+    {
+      include: {
         model: Product 
       }
-    ]
-  })
-  .then((TagData) => res.json(TagData))
-  .catch((err) => {
+    }
+  )
+  .then((tagData) => res.json(tagData))
+  .catch(err => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -27,14 +27,12 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: [
-      { 
+      include: { 
         model: Product 
       }
-    ]
   })
- .then((TagData) => res.json(TagData))
- .catch((err) => {
+ .then(TagData => res.json(TagData))
+ .catch(err => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -45,8 +43,8 @@ router.post('/', (req, res) => {
   Tag.create({
     tag_name: req.body.tag_name
   })
-    .then((TagData) => res.json(TagData))
-    .catch((err) => {
+    .then(TagData => res.json(TagData))
+    .catch(err => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -54,7 +52,8 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update({
+  Tag.update(
+  {
     tag_name: req.body.tag_name
   },
   {
@@ -62,8 +61,8 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then((TagData) => {
-    if (!TagData) {
+  .then(tagData => {
+    if (!tagData) {
       res.status(404).json({ message: 'No tag found with this id' });
       return;
     }
@@ -82,7 +81,7 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
- .then((TagData) => {
+ .then(TagData => {
   if (!TagData) {
     res.status(404).json({ message: 'No tag found with this id' });
     return;
